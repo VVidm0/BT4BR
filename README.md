@@ -46,6 +46,6 @@ git push origin
 
 ## Assignment #7:  Tidyverse, Dplyr, intro to ggplots
 ### 
->This section will only provide link to file necessary for completing the assignment.
-*[Plik Quarto](Assignment_7.qmd)
-*[Plik HTML](Assignment_7.html)
+>This section will only provide link to file necessary for completing the assignment.<br>
+[Plik Quarto](Assignment_7.qmd)<br>
+[Plik HTML](Assignment_7.html)<br>
