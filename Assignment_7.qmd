@@ -1,0 +1,109 @@
+---
+title: "Assignment 7th"
+author:
+  name: Maksymilian Gmur
+  date: 04.25.2025
+  affiliations:
+    id: JU
+    name: Jagiellonian University
+format: 
+  html:
+      df-print: paged
+      tidy: false
+      embed-resources: true
+      theme: lumen
+      toc: true
+      toc-location: left
+      toc-depth: 6
+      toc-expand: 6
+      code-tools:
+        source: true
+        toggle: true
+      code-fold: false
+      code-summary: "Show the code"
+      code-overflow: wrap
+      page-layout: full
+editor: visual
+editor_options: 
+  markdown: 
+    wrap: 72
+execute:
+  cache: true
+---
+
+# Task #1
+
+Firstly I will start with loading all essential libraries.
+
+```{r}
+library(tidyr)
+library(dplyr)
+library(readr)
+library(datasets)
+```
+
+The code block below was created with help of ChatGPT, to work around malfunctioning of ***parsed_table()*** function
+
+```{r}
+install.packages("DT")
+library(DT)
+```
+
+Progressing further I will solve task number one, with creation of *i**ris_long*** table. To do that, the pivot_longer function was used. I chose which columns should be converted with ***cols=match*** and then specify columns where the names and values of those columns will go. That is how I will obtain dataset with 3 columns: ***Species \| Trait \| Size***
+
+```{r}
+data("iris")
+View(iris)
+
+iris_long = pivot_longer(iris, cols=matches("Sepal|Petal"), names_to="Trait", values_to="Size" )
+```
+
+# Task #2
+
+## #2.1
+
+To compute mean values of specific traits in iris dataset I will use pipeline which will:
+
+1.  Group rows by paired values of Species and Traits columns, creating distinctive groups.
+
+2.  Those distinctive groups are then used in the input of summarize function, which summarize all mean values for each group.
+
+```{r}
+iris_mean <- iris_long %>%
+  group_by(Species, Trait) %>%
+  summarize(MeanValue = mean(Size))
+DT::datatable(iris_mean)
+```
+
+Output table contains all mean values for each trait, according to different species.
+
+## #2.2
+
+This task was pretty straightforward. It is very similar to previous task, however here I had to use ***filter()*** and ***max()*** functions additionally.
+
+```{r}
+iris_long %>%
+  filter(Species %in% c("virginica","versicolor")) %>%
+  group_by(Species, Trait) %>%
+  summarize(MaxValue = max(Size))
+```
+
+## #2.3
+
+This one was fun to solve. Basically, I thought about filtering ***Size column*** values through comparison to ***MeanValue column***. To do that, I used ***left_join()*** function, so every row would have all the appropriate values. Here I made iris_test table to check if my code worked correctly. After that was proved, I just added ***group_by()*** function to, well, group specific rows and then counted them using ***n()*** function. To be honest, I don't know how exactly this function works, so I checked on the internet that people use it as presented below. I tested it and here I had, probably, the correct answer. 
+
+```{r}
+iris_test <- iris_long %>%
+  left_join(y=iris_mean, by = c("Species", "Trait")) %>%
+  filter(Size > MeanValue, .by = Size)
+DT::datatable(iris_test)
+```
+
+```{r}
+iris_combined <- iris_long %>%
+  left_join(y=iris_mean, by = c("Species", "Trait")) %>%
+  filter(Size > MeanValue, .by = Size) %>%
+  group_by(Species, Trait) %>%
+  summarize(Count = n())
+DT::datatable(iris_combined)
+```
