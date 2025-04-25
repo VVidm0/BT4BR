@@ -1,4 +1,4 @@
-#BT4BR course
+# BT4BR course
 
 ## Assignment #5: Basics of GitHub
 
