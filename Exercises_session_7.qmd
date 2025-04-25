@@ -1,0 +1,453 @@
+---
+title: "Tidyverse, Dplyr, intro to ggplots"
+author:
+  name: Krystian Komenda
+  date: 04.16.2025 
+  affiliations:
+    id: JU
+    name: Jagiellonian University
+format: 
+  html:
+      df-print: paged
+# print df as tables https://quarto.org/docs/computations/r.html#data-frames
+      tidy: false
+      embed-resources: true
+      theme: lumen
+      toc: true
+      toc-location: left
+      toc-depth: 6
+      toc-expand: 6
+      code-tools:
+        source: true
+        toggle: true
+      code-fold: false
+      code-summary: "Show the code"
+      code-overflow: wrap
+      page-layout: full
+editor: visual
+editor_options: 
+  markdown: 
+    wrap: 72
+execute:
+  cache: true
+---
+
+## Tidyverse:
+
+It is a collection of **R packages** specialized in data science. It
+enhances readability, reproducibility of data sets.
+
+![](images/tidyverse_website.png)
+
+### Ecosystem of Tidyverse:
+
+| package | description                                  |
+|---------|----------------------------------------------|
+| ggplot2 | data visualization                           |
+| dplyr   | data manipulation                            |
+| tidyr   | pivoting, reshaping data                     |
+| readr   | data import                                  |
+| tibble  | modern version of data frames                |
+| stringr | string manipulation                          |
+| forcats | working with categorical variables (factors) |
+| purrr   | functional programming and list manipulation |
+
+Since version 2.0.0 packages work seamlessly together.
+
+### Tidy data:
+
+-   **column** - formed by each variable
+
+-   **row** - formed by each observation
+
+-   **table** - each type of observational unit
+
+**Tidy format** - in principle works in **long format**, in contrast to
+common **wide format** how data is often stored/presents.
+
+| operator | shortcut | description |
+|-------------------|---------------------|--------------------------------|
+| `%\>%` | Ctrl + Shift + M | The pipe operator (comes from magrittr package in Tidyverse) for writing clear and readable R code. |
+
+Other operators used **occasionally (niche and rare use):**
+
+| operator | description |
+|-------------------------|----------------------------------------------|
+| `%\<\>%` | reassigns the result back to the same variable |
+| `%\$%` | expose data frame columns |
+| `%T\>%` | Tee pipe - performs an action (like print() ) without affecting the main pipe flow. Mostly for quick checking and debugging. |
+
+| format:  | description:                                                     |
+|------------------------|-----------------------------------------------|
+| **Wide** | more compact and lighter (good for storing and presenting data). |
+| **Long** | easier to work with                                              |
+
+#### **Example:**
+
+**Wide format:** 
+
+|           |             |             |             |             |
+|-----------|-------------|-------------|-------------|-------------|
+|           | **Sample1** | **Sample2** | **Sample3** | **Sample4** |
+| **Gene1** | 5           | 10          | 25          | 30          |
+| **Gene2** | 98          | 15          | 6           | 95          |
+| **Gene3** | 64          | 32          | 106         | 13          |
+| **...**   | ...         | ...         | ...         | ...         |
+
+**Long format:**
+
+|          |            |                |
+|----------|------------|----------------|
+| **Gene** | **Sample** | **Expression** |
+| Gene 1   | Sample1    | 5              |
+| Gene 1   | Sample2    | 10             |
+| Gene 1   | Sample3    | 25             |
+| Gene 1   | Sample4    | 30             |
+| Gene 2   | Sample1    | 98             |
+| Gene 2   | Sample2    | 15             |
+| Gene 2   | Sample3    | 6              |
+| Gene 2   | Sample4    | 95             |
+| Gene 3   | Sample1    | 64             |
+| Gene 3   | Sample2    | 32             |
+| Gene 3   | Sample3    | 106            |
+| Gene 3   | Sample4    | 13             |
+| ...      | ...        | ...            |
+
+### Cheatsheets:
+
+-   Most tidyverse packages have CheatSheets
+    <https://posit.co/resources/cheatsheets/> 
+
+## dplyr:
+
+`dplyr` is a library belonging to **tidyverse** that helps with
+manipulating tables. It provides functions for different types of data.
+
+-   [Cheatsheet](https://rstudio.github.io/cheatsheets/html/data-transformation.html?_gl=1*xzfsvh*_ga*MjIyNDIwNTM2LjE2ODQ0MTUzNjQ.*_ga_2C0WZ1JHG0*MTcxMjA4MDg4Ny43LjAuMTcxMjA4MDg4Ny4wLjAuMA..)
+
+A noticeable element of this library is that it incorporates the **pipe
+(%\>%)**.
+
+Example:
+
+```{r}
+#file <- data_frame %>% 
+#  filter()
+```
+
+**ATTENTION**, new pipes are **\|\>** .
+
+### Manipulate rows
+
+-   `filter()` chooses rows based on column values.
+    -   Example: filter(col_name == "value") - for single value
+    -   Example: filter col_name %in% c("val1", "val2") - for more
+        values in **vector!**
+-   `arrange()` changes the order of the rows.
+    -   `desc()` inside arrange if we want them in decreasing order (by
+        default arrange increasingly).
+-   `slice_head()` and `slice_tail()` to show only n number of top or
+    bottom rows.
+
+### Manipulate columns
+
+-   `select()` changes whether or not a column is included.
+-   `mutate()` changes the values of columns and creates new columns.
+    -   Example: mutate(new_col = transformation(old_col))
+-   `rename()` rename columns.
+-   `separate()` split column in 2 (mostly used with strings).
+
+### Summarize data
+
+-   `glimpse()` shows structure of the table (similar to `str()` ).
+-   `group_by()` groups data ("invisibly"), and we can later apply
+    operations to each group.
+-   `summarize()` generates summary statistics (within each group id
+    data is groupped).
+    -   can be used wit
+
+### Operations
+
+-   `n()` counts observations.
+
+### Join data
+
+Join() (left_join, right_join, full_join)
+
+We can use `join()` functions to join to table with a common column.
+
+-   A left_join() keeps all observations in x.
+-   A right_join() keeps all observations in y.
+-   A full_join() keeps all observations in x and y.
+
+## tidyr
+
+### Manipulate tables
+
+-   `pivot_longer()` and `pivot_wider()` from wide to long and
+    vice-versa.
+
+    -   Example: `pivot_longer(cols="", names_to="", values_to="")`
+
+-   `join_by()` to join tables by common column.
+
+### **Separate samples**
+
+-   `separate()` - separate samples by "\_" to get 1 column with
+    condition and other with sample name.
+
+### Drop NA values
+
+-   `drop_na()`
+
+-   `replace_na()`
+
+## readr
+
+### Read data
+
+-   `read_csv()`, from **readr** package, is the Tidyverse version of
+    base R `read.csv()`.
+
+-   `read_table() - re`ad space-separated columns
+
+-   `write_csv()` - write table to csv
+
+### Exercise 1: `pivot_longer` to make long data:
+
+**Task 1:** Load table *TPMs_table_100genes.csv* using `readr`. Then use
+`View()` to see table.
+
+**Task 2:** Using `pivot_longer()` transpose wide format to long format
+and assign to table *TPM_long*.
+
+**Task 3:** Use `head` and `glimpse` to preview long format table.
+
+```{r}
+#| warning: false
+library(tidyr)
+library(dplyr)
+library(readr)
+```
+
+```{r}
+table = read_csv("work_files/TPMs_table_100genes.csv")
+View(table)
+TPM_long = pivot_longer(table, cols=matches("Control|Treated"), names_to="Sample", values_to="Values")
+                        
+View(TPM_long)
+
+head(TPM_long)
+#glimpse(TPM_long)
+```
+
+### Exercise 2: Separate()
+
+**Task:** Working on *TPMs_long* separate samples by "*" to get 1 column
+with condition and other with sample name. Keep original column Sample.
+Create output table TPMs*\_long_1
+
+```{r}
+
+TPM_long_1 <- TPM_long %>% 
+  separate(
+    col = "Sample", 
+    into=c("Condition","Number"),
+    sep="_" ,
+    remove = FALSE, 
+    convert = FALSE,
+    extra = "warn",
+    fill = "warn"
+    )
+
+```
+
+### Exercise 3: Select() and Filter()
+
+**Task 1:** Working on *TPMs_long_1* use `select()` to get the columns
+GeneID, Sample, Condition, and TPMs into a new table called
+*TPMs_long_2.*
+
+**Task 2:** In a new chunk, use `filter()` on *TPMs_long_2* to get those
+rows with TPMs \> 100 and arrange it from the lowest to the highest.
+Save table as *Out_table_e1.*
+
+```{r}
+TPM_long_2 <- TPM_long_1 %>%
+  select(c("GeneID","Sample","Condition","Values"))
+```
+
+```{r}
+Out_table_e1 <- TPM_long_2 %>%
+  filter(Values > 100, .by = Values)
+```
+
+### Exercise 4: Filter()
+
+-   **Task 1:** Use `filter()` on table *Out_table_e1* to filter the
+    expression (TPMs) of the gene in all samples :
+
+    -   FBgn0000003
+
+-   **Task 2:** In a new chunk, get the TPMs of a set of genes. Save as
+    *Out_table_e2* table:
+
+    -   FBgn0000042, FBgn0000150, FBgn0000261,FBgn0000318
+
+```{r}
+filter(Out_table_e1, GeneID == "FBgn0000003")
+
+Out_table_e2 <- Out_table_e1 %>%
+  filter(GeneID %in% c("FBgn0000042", "FBgn0000150", "FBgn0000261","FBgn0000318"))
+```
+
+### Exercise 5: Group_by() and apply a function
+
+**Task:** From the *Out_table_e2* dataset, calculate the **mean
+expression (MeanTPM)** for the following genes in
+both **Control** and **Treated** conditions:
+
+-   FBgn0000150, FBgn0000042, FBgn0000261
+
+Then, arrange from the highest meanTPM to the lowest and save to
+*Out_table_e3*
+
+```{r}
+Out_table_e3 <- Out_table_e2 %>%
+  filter(GeneID %in% c("FBgn0000042", "FBgn0000150", "FBgn0000261")) %>%
+  group_by(GeneID, Condition) %>%
+  summarize(MeanTPM = mean(Values)) %>%
+  arrange(desc(MeanTPM))
+```
+
+### **Exercise 6: full_join()**
+
+**Task 1:** Use `read_csv` to load *Table_Symbl_Gene.csv*
+
+**Task 2:** Use `full_join()` to add the symbol and gene name to the
+long *Out_table_e3*: Create table *TPMs_long_2_gename* as your result.
+
+**Task 3:** In a new code chunk use `left_join()` to add the symbol and
+gene name to the long *Out_table_e3.*
+
+**Task 4:** In a new code chunk use `right_join()` to add the symbol and
+gene name to the long *Out_table_e3.* Save output as
+*TPMs_long_2_gename_right* table.
+
+```{r}
+table_2 = read_csv("work_files/Table_Symbl_Gene.csv")
+TPMs_long_2_gename <- Out_table_e3 %>%
+  full_join(y=table_2, by = c("GeneID" = "FLYBASE"))
+
+TPMs_long_2_gename_left <- Out_table_e3 %>%
+  left_join(y=table_2, by = c("GeneID" = "FLYBASE"))
+
+TPMs_long_2_gename_right <- Out_table_e3 %>%
+  right_join(y=table_2, by = c("GeneID" = "FLYBASE"))
+```
+
+### **Exercise 7:** drop_na():
+
+Task 1: Use `mutate()` to change `NA` to 0 from table
+*TPMs_long_2_gename_right* in MeanTPMs
+
+**Task 2:** Use `drop_na` to remove all NAs from table
+*TPMs_long_2_gename* then use `filter()` to check if there are any `NA`
+in a table:
+
+```{r}
+TPMs_long_2_gename_right %>%
+  filter(is.na(MeanTPM)) %>%
+  mutate(MeanTPM = 0)
+
+TPMs_long_2_gename <- TPMs_long_2_gename %>%
+  drop_na()
+
+TPMs_long_2_gename %>%
+  filter()
+```
+
+### **Exercise 8: work on data sets**
+
+**Task:** We want to get the **Symbols** and **Gene** names of the top
+**10 expressed genes** across samples.
+
+-   Start with *TPMs_long_2.*
+
+-   Identify the genes with highest expression across **samples**
+    (highest sum of TPMs).
+
+-   Add the annotation from **Table_SymbolsGenes**:
+
+-   Do it using dplyr functions concatenated with `%>%`.
+
+```{r}
+## YOUR CODE HERE
+
+```
+
+## **Extras**: Package masking
+
+Sometimes loading a specific package leads to masking the effects of
+previously loaded package resulting with an error.
+
+Check the code below (before loading any prior libraries):
+
+```{r}
+x <- rep(1:3, 3)
+print(filter(x, rep(1/3, 3)))
+```
+
+Now, load package `dplyr` and look what happens:
+
+```{r}
+library(dplyr)
+x <- rep(1:3, 3)
+print(filter(x, rep(1/3, 3)))
+```
+
+`dplyr` overwrote functionality of `stats` package, using it's own
+interpretation. To keep your code operational you can specify the
+package before you run the function:
+
+```{r}
+library(dplyr) #make sure library is loaded
+x <- rep(1:3, 3)
+
+print(stats::filter(x, rep(1/3, 3))) #referring to stats package
+```
+
+### 
+
+## Assignment 7:
+
+Use **tidyr** and **dplyr** libraries whenever possible, to do the
+following:
+
+**Task 1:** Load the "iris" dataset and transform it to longer.
+
+-   tip: you should get 3 columns Species \| Trait \| Size
+
+**Task 2:** Answer the following questions.
+
+-   tip: you can answer each question "piping" only 2-3 commands
+
+**Task 2.1:** What is the **mean** **length** and **width** of the
+**sepal** and **petal** of each species?
+
+**Task 2.2:** What is the **largest** and **widest**,  **petal** and
+**sepal,**  of **virginica** and **versicolor** species?
+
+**Task 2.3:** For each species, for sepal and petal width and length,
+how many observations are above the mean?\*
+
+-   tip: adding the means as column might help
+
+**\***Might seem difficult (it is not that difficult if you know the
+tricks ;) ). If you don't manage to make it work, submit your best
+attempts and we will discuss it in class.
+
+**Task 3:** Deliver a link to GitHub containing the a **Quarto** file
+and the compiled **HTML**. It should contain explanations of what each
+chunk does. If you have private repository, remember to send me
+invitation so I can access it.
