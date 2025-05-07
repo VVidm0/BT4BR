@@ -46,6 +46,12 @@ git push origin
 
 ## Assignment #7:  Tidyverse, Dplyr, intro to ggplots
 ### 
->This section will only provide link to file necessary for completing the assignment.<br>
+>This section will only provide links to files necessary for completing the assignment.<br>
 [Plik Quarto](Assignment_7.qmd)<br>
 [Plik HTML](Assignment_7.html)<br>
+
+##Assignment #8: ggplot
+###
+>This section will provide links to files necessary for completing the assignment.<br> This includes Quarto notebook and compiled HTML file.<br>
+[Plik Quarto](Assignment_8.qmd)<br>
+[Plik HTML](Assignment_8.html)<br>

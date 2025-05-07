@@ -1,0 +1,85 @@
+---
+title: "Assignment 8th"
+author:
+  name: Maksymilian Gmur
+  date: 05.07.2025
+  affiliations:
+    id: JU
+    name: Jagiellonian University
+format: 
+  html:
+      df-print: paged
+      tidy: false
+      embed-resources: true
+      theme: lumen
+      toc: true
+      toc-location: left
+      toc-depth: 6
+      toc-expand: 6
+      code-tools:
+        source: true
+        toggle: true
+      code-fold: false
+      code-summary: "Show the code"
+      code-overflow: wrap
+      page-layout: full
+editor: visual
+editor_options: 
+  markdown: 
+    wrap: 72
+execute:
+  cache: true
+---
+
+# Task #1
+
+As for the start of this assignment I chose the one of two 3D plots from
+previous assignment number 6.
+
+![](cotter_fig2.jpg)
+
+# Task #2
+
+This section will provide data downloaded from published article, from
+which plot above originates. This data will be used to create another
+bar plot, but this time it will be better, more readable version of the
+plot in Task #1.
+
+```{r}
+library("tidyr")
+library("dplyr")
+library("ggplot2")
+```
+
+```{r}
+hematocrit_levels = c("<30%", "30–<33%", "33–<36%", "36–<39%", "=<39%")
+mortality_data <- data.frame(
+  Hematocrit = rep(hematocrit_levels, times = 4),
+  Mortality = c(
+    271,245,185,184,177,  # Q1
+    344,278,212,195,186,  # Q2
+    425,316,247,199,180,  # Q3
+    501,354,280,227,196   # Q4
+  ),
+  DoseQuartile = rep(c("Q1", "Q2", "Q3", "Q4"), each = length(hematocrit_levels))
+)
+```
+
+```{r}
+ggplot(data = mortality_data, aes(x=Hematocrit,y=Mortality))+
+  geom_bar(stat="identity", aes(fill=DoseQuartile), position='dodge')+
+  scale_x_discrete(limits = hematocrit_levels)+
+    labs(title="Unadjusted 1-year mortality rates", 
+       subtitle="by hematocrit group disaggregated by epoetin dose quartile.",
+       x="Mortality Rate(per 1,000 patients)", 
+       y="Hematocrit Group(%)"
+       )+ 
+  theme(
+  plot.title = element_text(hjust=0.3, vjust=2,size = 14),
+  plot.subtitle = element_text(hjust=0.3, vjust=3,size = 8),
+  axis.title.x = element_text(vjust = -1,size = 9),
+  axis.title.y = element_text(vjust = 3,size = 9),
+  axis.text.x = element_text(angle = 45,  vjust = 0.5, hjust = 0.5, size = 10),
+  axis.text.y = element_text(size = 10)
+)
+```
