@@ -47,11 +47,17 @@ git push origin
 ## Assignment #7:  Tidyverse, Dplyr, intro to ggplots
 ### 
 >This section will only provide links to files necessary for completing the assignment.<br>
-[Plik Quarto](Assignment_7.qmd)<br>
-[Plik HTML](Assignment_7.html)<br>
+[Quarto file](Assignment_7.qmd)<br>
+[HTML file](Assignment_7.html)<br>
 
 ##Assignment #8: ggplot
 ###
 >This section will provide links to files necessary for completing the assignment.<br> This includes Quarto notebook and compiled HTML file.<br>
-[Plik Quarto](Assignment_8.qmd)<br>
-[Plik HTML](Assignment_8.html)<br>
+[Quarto file](Assignment_8.qmd)<br>
+[HTML file](Assignment_8.html)<br>
+
+##Assignment #9: ggplot
+###
+>This section will provide links to files necessary for completing the assignment.<br> This includes UI and Server files for Shiny Web App.<br>
+[UI file](Assignment_8.qmd)<br>
+[Server file](Assignment_8.html)<br>
