@@ -56,7 +56,7 @@ git push origin
 [Quarto file](Assignment_8.qmd)<br>
 [HTML file](Assignment_8.html)<br>
 
-##Assignment #9: ggplot
+## Assignment #9: ggplot
 ###
 >This section will provide links to files necessary for completing the assignment.<br> This includes UI and Server files for Shiny Web App.<br>
 [UI file](App_5/ui.R)<br>
